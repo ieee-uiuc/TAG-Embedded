@@ -1,9 +1,9 @@
-##TAG Embedded
+# TAG Embedded
 
-###Intro to c/cpp
+### Intro to c/cpp
 
 
-####Variables
+#### Variables
 Variable are boxes that hold a value in memory. You can either read to them, or write to them. Cpp is a typed language, so every box is made to store a specific representation, and once created for that it cannot be changed.
 A few examples:
 ```cpp
@@ -18,7 +18,7 @@ bool boolean; // Used to store a single bit to represent true/false
 
 These are the main primitive types in cpp. There are a few other ones, but we most likely wont use them.
 
-####Conditionals
+#### Conditionals
 Now that we have a place to store our data, we need some way to manipulate how the program functions.
 We do this with "if", "else", and "else if"!
 If statements are very simple. They decide whether or not to do something based on a certain condition.
@@ -76,7 +76,7 @@ else {
 
 Now we can clearly see the relationship between all the conditionals. If one fails, then we move onto the next, and we break out as soon as a condition evaluates to true.
 
-####Operators
+#### Operators
 Operators are what allow us to manipulate the data, and are essential to every cpp program.
 Lets take a look at some important ones.
 These are best shown.
@@ -112,6 +112,6 @@ result = condition1 && condition2; // The and ("&&") operator returns true only 
 ```
 Now that we have operators down, lets move onto another essential part of cpp: loops
 
-####Loops
+#### Loops
 
 Loops are very simple. All they do is repeat the same thing over and over again until they are told to stop.
