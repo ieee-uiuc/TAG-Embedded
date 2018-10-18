@@ -37,7 +37,7 @@ int maximumElement(int *arr, int size) {
 
     @param arr the string array to be reversed
     @return void
-    ** Hint **
+    ** HINT **
     Think about swapping the elements to reverse the array.
     You are only given a pointer, so you can't make a new array.
 

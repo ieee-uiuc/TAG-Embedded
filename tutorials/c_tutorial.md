@@ -1,6 +1,6 @@
 # TAG Embedded
 
-### Intro to c/cpp tutorial 1
+### Intro to c/cpp
 
 
 #### Variables
@@ -207,7 +207,7 @@ int rectPrismVolume(struct RectPrism rect) {
 // We now have a clean way to represent a object in the form of a struct.
 ```
 
-#### Pointers
+#### Pointers and Arrays
 Ah yes, pointers...these little guys scare away so many people from systems software. However, they are extremely important and powerful, and can be understood fairly quickly.
 
 Lets say we have a struct that has 3000 int variables in it, and we want to pass it along to a function. Since a function creates a copy of the struct, it would have to copy all 3000 integers every time it was called! This takes a long time, and is very inefficient. What if there was a way to simply tell the function where this struct resides in memory? That is exactly what pointers do! Pointers hold an address to a something in memory, instead of its actual value. Lets look at some examples...
@@ -227,7 +227,7 @@ pointer = &b;
 // "b" should now be 30, right? Pointer now points to be, so assigning 30 to *pointer is now the same as assigning "b" to 30.
 
 ```
-#### Arrays
+##### Arrays
 
 Arrays are a type of data storage in which data is stored sequentially. It is just like a collection of variables, except it asserts that all the variables are one after another.
 
