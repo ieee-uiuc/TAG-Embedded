@@ -2,3 +2,4 @@ program
 *.o
 *.d
 programming_problems/*/.sconsign.dblite
+*.out
