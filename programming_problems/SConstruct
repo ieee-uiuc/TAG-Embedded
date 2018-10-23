@@ -1,0 +1,4 @@
+inc_dir = "include"
+src_dir = "src"
+env = Environment(CPPPATH = [inc_dir])
+env.Program("Program", Glob(src_dir + "/*.c"))
