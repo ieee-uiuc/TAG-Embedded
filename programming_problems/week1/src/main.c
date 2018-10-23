@@ -51,7 +51,7 @@ int main() {
     testSwap();
     testMaximumElement();
     testReverseString();
-    // Impliment these test cases.
+    // Implement these test cases.
     // Testing is fun. Err, sorta. Okay not really.
     testEvenOddDiff();
     testSeniorStudents();
