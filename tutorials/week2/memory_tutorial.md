@@ -20,17 +20,17 @@ int main() {
 
 What will happen in this code?
 
-The function returnArray will create an array in its local stack memory. Then it will put the pointer to the first element in the variable "arr". Then the pointer will be returned, but before that array reaches main, the contents of the array will be deleted, and the address in the pointer will no longer be valid. In other words, the kernel has taken back the memory, and it no longer belongs to your program. When main tries to access the pointers contents the kernel will send a segfault telling your program to halt.
+The function returnArray will create an array in its local stack memory. Then it will put the address to the first element in the variable "arr". Then the pointer will be returned. However, before the array's contents reach main, the contents of the array will be deleted as part of the function returning, and the address stored in arr will no longer be valid. In other words, the kernel has taken back the memory, and it no longer belongs to your program. When main tries to access the pointer's contents, the kernel will send a signal telling your program to halt. This is a segfault, and they are bad.
 
 Lesson: Don't touch the kernel's memory. Only touch the memory it lets you keep.
 
 So how can we fix this? What if we want more permenant memory?
 
-The answer is static and dynamic allocation of memory!
+The answer is the static and dynamic allocation of memory!
 
 #### Static Memory
 
-Lets look at static allocation first. Once of the uses of the keyword static in c is to maintain the value of a function's local variable even after the function returns. Lets return to our previous example except this time put the static keyword in front of the array.
+Lets look at static allocation first. One of the uses of the keyword static in c is to maintain the value of a function's local variable even after the function returns. Lets return to our previous example, except this time put the static keyword in front of the array's declaration.
 
 ```Cpp
 int* returnArray() {
@@ -47,14 +47,14 @@ int main() {
 ```
 With just that addition of a single word we have solved the problem. Now this program no longer segfaults, and the main function can successfully traverse the array. This is because the c compiler allocates the static variables in a different part of memory than other local variables.
 
-Static variables are a great way to solve this memory problem, but they are very, well, static. After they are made you cannot change them. This is in contrast to the next time of memory we will talk about, which is dynamic.
+Static variables are a great way to solve this memory problem, but they are very, well, static. After they are made you cannot change them. This is in contrast to the next type of memory we will talk about, which is dynamic.
 
 #### Dynamic Memory
 
-This is the good stuff. Dynamically allocated memory has a special place in the program's memory called the heap. This is the place where all dynamic objects and variables are stored. Dynamic meaning that they are persistent through function returns, and their space can also be reallocated to increase their size.
-
 **Note:**
-When working with pointers returned from memory functions you should **always** check to see if the pointer is null. If the system fails to allocate the memory, then it will return null. If this happens, then either try again, or exit the program gracefully with a error printed.
+When working with pointers returned from memory functions you should **always** check to see if the pointer is null. If the system fails to allocate the memory, then it will return null. If this happens, then either try again, or exit the program gracefully with a error being printed.
+
+This is the good stuff. Dynamically allocated memory has a special place in the program's memory called the heap. This is the place where all dynamic objects and variables are stored. Dynamic meaning that they are persistent through function returns, and their space can also be reallocated to increase their size.
 
 There are a few very important functions to do this in c.
 
@@ -65,17 +65,19 @@ Here are a few examples of them:
 
 int * mallocedMem = (int*) malloc(sizeof(int) * 4);
 
+
+// Always check for an error! In this case it is extremely unlikely, but still possible.
 if (mallocedMem == NULL) {
     printf("Uh oh, something went wrong here");
     exit(1);
 }
 
-// This code is saying that I want the program to create a block of memory that is sizeof(int) * 5 bytes long, and return me a pointer to the first byte. This is an array of int's of size 4.
+// This code is saying that I want the program to create a block of memory that is sizeof(int) * 5 bytes long, and return me a pointer to the first byte. This is an int array of size 4.
 
 // Another very similar memory allocating function is calloc. This function takes in 2 parameters. One parameter is the number of total elements, and the other is the size of each element.
 calloc(number, size) is the same as malloc(number * size);
 
-int * callocedMem = (int*) malloc(4, sizeof(int));
+int * callocedMem = (int*) calloc(4, sizeof(int));
 
 if (callocedMem == NULL) {
     printf("Uh oh, something went wrong here");
@@ -103,6 +105,7 @@ mallocedMem[9] = 300;
 mallocedMem = (int *) realloc(mallocedMem, sizeof(int) * 15);
 // Now our array has 15 elements, but still keeps the value 300 at index 9!
 
+// The function realloc can also fail and return null! Make sure to check for this.
 if (mallocedMem == NULL) {
     printf("Uh oh, something went wrong here");
     exit(1);
@@ -142,4 +145,4 @@ Look at all the sample code. How many of those lines were simply checking for er
 There are lots of other useful memory manipulation functions in stdio.h and stdlib.h headers. Functions like memmpy, memcmp, memset, memmove, and memchr are very useful! It's definitely worth the time to go investigate what these functions do.
 
 
-### Thanks for reading
+### Thanks for reading!
