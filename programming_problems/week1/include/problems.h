@@ -5,11 +5,11 @@ struct Student {
     int creditHours;
 };
 
-void pointerSwap (int *a, int *b);
+void swap (int *a, int *b);
 
 int maximumElement(int *arr, int size);
 
-void reverseArray(char *str);
+void reverseString(char *str);
 
 int evenOddDiff(int *arr, int size);
 

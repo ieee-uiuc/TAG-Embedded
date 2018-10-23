@@ -1,4 +1,4 @@
-Program
+program
 *.o
 *.d
-*/.sconsign.dblite
+programming_problems/*/.sconsign.dblite

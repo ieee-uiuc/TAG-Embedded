@@ -1,7 +1,6 @@
 inc_dir = "include"
 src_dir = "src"
 build_dir = "bin"
-
 Export('inc_dir')
 Export('build_dir')
 Export('src_dir')

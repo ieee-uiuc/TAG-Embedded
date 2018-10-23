@@ -16,7 +16,7 @@
     @param b an integer pointer
     @return void
 */
-void pointerSwap (int *a, int *b) {
+void swap (int *a, int *b) {
 
 }
 
@@ -44,7 +44,7 @@ int maximumElement(int *arr, int size) {
     You are not given a size of the array here, so you need to find that out first.
     Think how char arrays are structured. How would you find the size?
 */
-void reverseArray(char *str) {
+void reverseString(char *str) {
 
 }
 

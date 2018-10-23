@@ -4,6 +4,7 @@
 
 
 #### Variables
+
 Variable are boxes that hold a value in memory. You can either read to them, or write to them. Cpp is a typed language, so every box is made to store a specific representation, and once created for that it cannot be changed.
 A few examples:
 ```cpp
@@ -19,6 +20,7 @@ bool boolean; // Used to store a single bit to represent true/false
 These are the main primitive types in cpp. There are a few other ones, but we most likely wont use them.
 
 #### Conditionals
+
 Now that we have a place to store our data, we need some way to manipulate how the program functions.
 We do this with "if", "else", and "else if"!
 If statements are very simple. They decide whether or not to do something based on a certain condition.
@@ -77,6 +79,7 @@ else {
 Now we can clearly see the relationship between all the conditionals. If one fails, then we move onto the next, and we break out as soon as a condition evaluates to true.
 
 #### Operators
+
 Operators are what allow us to manipulate the data, and are essential to every cpp program.
 Lets take a look at some important ones.
 These are best shown.
@@ -139,8 +142,8 @@ The last type of loop is the do-while loop. It is rarely used, and is very subtl
 #### Functions
 
 In programming functions are very useful for making sure you don't repeat yourself too much. Say that I have a program that needs to compute the absolute value of a
-number very frequently. I could just copy and past the same code a bunch of times, but that would be a lot of work, and we're lazy. So instead we can generalize the very simply
-absolute value algorithm, and make a box that takes in any number that we want to have the absolute value of, and give back that same number's absolute value.
+number very frequently. I could just copy and past the same code a bunch of times, but that would be a lot of work, and we're lazy. So instead we can generalize the very simple
+absolute value algorithm. We can make a function that acts like a box. In this case, it is a box that takes in any number that we want to have the absolute value of, and gives back that same number's absolute value.
 
 ```Cpp
 // Declaration of a function
@@ -189,7 +192,7 @@ struct RectPrism{
 };
 // Here we use the "struct" keyword to tell the compiler that this is how a RectPrism struct should look. Now, whenever we want to create a actual RectPrism struct the compiler knows what we are referring to.
 
-// To create a struct we simply say. Unfortunately whenever you declare or create a struct you must specify the struct keyword in front. This just tells the compiler not to try and evaluate it as a normal type. (you can get around this using typedef and other methods, but I won't walk about it here).
+// To create a struct we simply use the "struct" keyword. Unfortunately whenever you declare or create a struct you must specify the struct keyword in front. This just tells the compiler not to try and evaluate it as a normal type. (you can get around this using typedef and other methods, but I won't talk about it here).
 struct RectPrism rect;
 rect.w = 13;
 rect.h = 15;
@@ -208,6 +211,7 @@ int rectPrismVolume(struct RectPrism rect) {
 ```
 
 #### Pointers
+
 Ah yes, pointers...these little guys scare away so many people from systems software. However, they are extremely important and powerful, and can be understood fairly quickly.
 
 Lets say we have a struct that has 3000 int variables in it, and we want to pass it along to a function. Since a function creates a copy of the struct, it would have to copy all 3000 integers every time it was called! This takes a long time, and is very inefficient. What if there was a way to simply tell the function where this struct resides in memory? That is exactly what pointers do! Pointers hold an address to a something in memory, instead of its actual value. Lets look at some examples...
@@ -218,7 +222,7 @@ int b = 50;
 // If we want to find the location each of these integers are located at we can simply use the & operator.
 
 int *pointer = NULL; // This declares a pointer, and assigns it to NULL. NULL is a special value that indicates that pointer doesn't currently have an address assigned to it.
-pointer = &a; // Here's the tricky part. Now pointer has the address of a stored in it.
+pointer = &a; // Here's the tricky part. Now pointer has the address of "a" stored in it.
 b = *pointer; // The star operator, when used with pointers, indicates accessing the data at a specific address. *pointer is the exact same thing as "a" because pointer still contains the address of a. Now because we are assigning the data at pointer to "b", it stores the same data as "a".
 
 // What does this do?
