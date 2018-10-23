@@ -1,5 +1,7 @@
 ## TAG Embedded
 
+### Memory Tutorial
+
 In the previous tutorial we talked about arrays. Arrays are sequential data structures that have a fixed number of elements. Arrays that are allocated within functions become local to that function, and disappear when that function returns.
 
 Take a look at this example:
