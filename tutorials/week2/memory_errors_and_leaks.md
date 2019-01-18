@@ -20,7 +20,7 @@ Memory errors happen when you do something the Linux kernel doesn't like. This c
 
 So what do these look like? See if you can spot if there are memory errors in these examples, and if so, which types.
 
-'''cpp
+```cpp
     int * getArr() {
         int arr[] = {1, 2, 3, 4};
         return arr;
@@ -30,11 +30,11 @@ So what do these look like? See if you can spot if there are memory errors in th
         printf("%d", ptr[2]);
         return 0;
     }
-'''
+```
 
 Lets try another one. Recall how simple pointer arithmetic works.
 
-'''cpp
+```cpp
     int computeSum(int * arr) {
         int sum = 0;
         while (arr != NULL) {
@@ -49,11 +49,11 @@ Lets try another one. Recall how simple pointer arithmetic works.
         printf("%d", sum);
         return 0;
     }
-'''
+```
 
 Lets be more subtle. What's wrong with this program?
 
-'''cpp
+```cpp
     char * repeatChars(char c, int times) {
         char * arr = (char*) malloc(times * sizeof(char));
         for (int i = 0; i < times; i++) {
@@ -66,11 +66,11 @@ Lets be more subtle. What's wrong with this program?
         printf("%s", c);
         return 0;
     }
-'''
+```
 
 Is there something wrong with this one?
 
-'''cpp
+```cpp
     #define NUM_ROWS 15
     #define NUM_COLS 15
     int main() {
@@ -85,7 +85,7 @@ Is there something wrong with this one?
         free(mem);
         return 0;
     }
-'''
+```
 
 Last one! This is some code for a stack. It is a LIFO data structure, so the first thing to go in is the last one out.
 * push adds an element to the top of the data structure
@@ -93,11 +93,13 @@ Last one! This is some code for a stack. It is a LIFO data structure, so the fir
 * isEmpty simply checks to see if there are any elements left
 * initStack creates the memory to use for the stack
 
-** There is a subtle memory error in this code. See if you can find it. **
+**There is a subtle memory error in this code. See if you can find it.**
 This is not easy! Question everything in here, and see if you can spot the hidden error. The syntax is fine, and so is the logic.
 There is only memory errors and leaks.
 
-'''cpp
+**Hint: There is one memory error, and one memory leak in this code.**
+
+```cpp
     #define INITIAL_NUM_ELEMS 30
 
     struct Stack {
@@ -162,4 +164,4 @@ There is only memory errors and leaks.
         free(s);
         return 0;
     }
-'''
+```
