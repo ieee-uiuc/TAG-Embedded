@@ -9,7 +9,7 @@ struct Parser* parser_init() {
     parser->maxcols = 0;
     parser->maxtokenlen = 0;
     parser->data = NULL;
-    mallocData(parser, DEFAULT_ROWS, DEFAULT_COLS, DEFAULT_TOKEN_LEN);
+    mallocData(parser, DEFAULT_ROWS, DEFAULT_COLS);
     return parser;
 }
 
@@ -22,7 +22,7 @@ void setDelimiter (char rowDelim, char colDelim, struct Parser *parser) {
     parser->colDelimiter = colDelim;
 }
 
-void mallocData(struct Parser *parser, int rows, int cols, int tokenLen) {
+void mallocData(struct Parser *parser, int rows, int cols) {
     if (parser == NULL) {
         printf("Must specify a parser\n");
         return;
@@ -42,16 +42,18 @@ void mallocData(struct Parser *parser, int rows, int cols, int tokenLen) {
         }
         for (int j = 0; j < cols; j++) {
             parser->data[i][j] = NULL;
-            parser->data[i][j] = (char *) malloc(sizeof(char) * tokenLen);
-            if (parser->data[i][j] == NULL) {
-                perror("malloc failed");
-                exit(EXIT_FAILURE);
-            }
+            // parser->data[i][j] = (char *) malloc(sizeof(char) * tokenLen);
+            // if (parser->data[i][j] == NULL) {
+            //     perror("malloc failed");
+            //     exit(EXIT_FAILURE);
+            // }
         }
     }
+    parser->endColIdx = (int *) malloc(sizeof(int) * rows);
+    memset(parser->endColIdx, 0, sizeof(int) * rows);
     parser->maxrows = rows;
     parser->maxcols = cols;
-    parser->maxtokenlen = tokenLen;
+    parser->maxtokenlen = 0;
 }
 
 // readLine will also resize the buffer when needed
@@ -88,27 +90,8 @@ void freeParser (struct Parser *parser) {
     free(parser->data);
     free(parser);
     parser = NULL;
-    // if (parser == NULL) return;
-    // if (parser->data = NULL) return;
-    // for (int i = 0; i < parser->maxrows; i++) {
-    //     for (int j = 0; j < parser->maxcols; j++) {
-    //         printf("%d, %d\n", i, j);
-    //         printf("%s", parser->data[i][j]);
-    //         if (parser->data[i][j] != NULL)
-    //             free(parser->data[i][j]);
-    //         parser->data[i][j] = NULL;
-    //     }
-    //     if (parser->data[i] != NULL)
-    //         free(parser->data[i]);
-    //     parser->data[i] = NULL;
-    // }
-    // free(parser->data);
-    // parser->data = NULL;
-    // free(parser);
-    // parser = NULL;
 }
 void reallocData(struct Parser *parser, int rows, int cols, int tokenLen) {
-    printf("Reallocing\n");
     parser->data = (char ***) realloc(parser->data, sizeof(char**) * rows);
     if (parser->data == NULL) {
         perror("realloc failed");
@@ -121,13 +104,24 @@ void reallocData(struct Parser *parser, int rows, int cols, int tokenLen) {
             exit(EXIT_FAILURE);
         }
         for (int j = 0; j < cols; j++) {
-            parser->data[i][j] = (char *) realloc(parser->data[i][j], sizeof(char) * tokenLen);
-            if (parser->data[i][j] == NULL) {
-                perror("realloc failed");
-                exit(EXIT_FAILURE);
+            if (parser->data[i][j] != NULL) {
+                parser->data[i][j] = (char *) realloc(parser->data[i][j], sizeof(char) * tokenLen);
+                if (parser->data[i][j] == NULL) {
+                    perror("realloc failed");
+                    exit(EXIT_FAILURE);
+                }
+                memset(parser->data[i][j] + parser->maxtokenlen, 0, tokenLen - parser->maxtokenlen * sizeof(char)); // Set new data to 0
+            }
+            else {
+                parser->data[i][j] = (char *) malloc(sizeof(char) * tokenLen);
+                if (parser->data[i][j] == NULL) {
+                    perror("malloc failed");
+                    exit(EXIT_FAILURE);
+                }
             }
         }
     }
+    parser->endColIdx = (int *) realloc(parser->endColIdx, sizeof(int) * rows);
     parser->maxrows = rows;
     parser->maxcols = cols;
     parser->maxtokenlen = tokenLen;
@@ -147,29 +141,27 @@ void readCSV(struct Parser *parser, char *readfilename) {
     // Init default buffer
     size_t buf_size = DEFAULT_BUF_SIZE * sizeof(char);
     char *linebuf = (char *) malloc(sizeof(char) * buf_size);
-
+    memset(linebuf, 0, buf_size * (sizeof(char)));
     int currentRow = 0;
     int currentCol = 0;
     int i = 0;
     while (!feof(fp)) {
+
         readLine(parser, fp, &linebuf, &buf_size);
+
         char *tok = strtok(linebuf, &(parser->colDelimiter));
         if (currentRow >= parser->maxrows) {
-            printf("Reallocate rows\n");
+            //printf("Reallocate rows\n");
             reallocData(parser, 2 * currentRow, parser->maxcols, parser->maxtokenlen);
         }
         while (tok != NULL) {
-            printf("%d %d\n", currentRow, currentCol);
-            printf("%s\n", tok);
-            // maxcols -1 so a "" can be allocated
             if (currentCol >= parser->maxcols - 1) {
-                printf("Reallocate cols\n");
+                //printf("Reallocate cols\n");
                 reallocData(parser, parser->maxrows, 2 * currentCol, parser->maxtokenlen);
             }
             int lenstr = strlen(tok);
-            // maxtokenlen - 1 so there is space to allocate a ""
             if (lenstr >= parser->maxtokenlen - 1) {
-                printf("Reallocate tokens\n");
+                //printf("Reallocate tokens\n");
                 reallocData(parser, parser->maxrows, parser->maxcols, 2 * lenstr);
             }
             strcpy(parser->data[currentRow][currentCol], tok);
@@ -177,13 +169,12 @@ void readCSV(struct Parser *parser, char *readfilename) {
             tok = strtok(NULL, &(parser->colDelimiter));
 
         }
-        strcpy(parser->data[currentRow][currentCol], "");
+        parser->endColIdx[currentRow] = currentCol;
         currentCol = 0;
         currentRow++;
     }
     parser->rows = currentRow - 1;
     free(linebuf);
-    puts("Freing\n");
     if (fclose(fp) == -1) {
         perror("Can't close file");
         exit(EXIT_FAILURE);
@@ -193,9 +184,12 @@ void readCSV(struct Parser *parser, char *readfilename) {
 void printCSV(struct Parser *parser) {
     for (int i = 0; i < parser->rows; i++) {
         int j = 0;
-        while(strcmp(parser->data[i][j], "") != 0 && j < parser->maxcols) {
-            printf("%s", parser->data[i][j]);
-            if (strcmp(parser->data[i][j + 1], "") != 0 && j + 1 < parser->maxcols) {
+        while(parser->endColIdx[i] >= j) {
+
+            if (parser->data[i][j] != NULL) {
+                printf("%s", parser->data[i][j]);
+            }
+            if (parser->endColIdx[i] > j + 1) {
                 printf("%c", parser->colDelimiter);
             }
             j++;
@@ -219,18 +213,20 @@ void writeCSV (struct Parser *parser, char *writefilename) {
     int col = 0;
     for (int i = 0; i < parser->rows; i++) {
         col = 0;
-        while (col < parser->maxcols && strcmp(parser->data[i][col], "") != 0) {
-            size_t len = strlen(parser->data[i][col]);
-            size_t bytes_written = fwrite(parser->data[i][col], sizeof(char), len, fp);
-            if (bytes_written != len) {
-                perror("Writing bytes");
-                exit(EXIT_FAILURE);
-            }
-            if (strcmp(parser->data[i][col + 1], "") != 0 && col + 1 < parser->maxcols) {
-                unsigned ret_val = fputc(parser->colDelimiter, fp);
-                if (ret_val == EOF) {
-                    perror("Writing delimiter");
+        while (col < parser->maxcols && strcmp(parser->data[i][col], "\0") != 0) {
+            if (parser->data[i][col] != NULL) {
+                size_t len = strlen(parser->data[i][col]);
+                size_t bytes_written = fwrite(parser->data[i][col], sizeof(char), len, fp);
+                if (bytes_written != len) {
+                    perror("Writing bytes");
                     exit(EXIT_FAILURE);
+                }
+                if (parser->endColIdx[i] >= col && col + 1 < parser->maxcols) {
+                    unsigned ret_val = fputc(parser->colDelimiter, fp);
+                    if (ret_val == EOF) {
+                        perror("Writing delimiter");
+                        exit(EXIT_FAILURE);
+                    }
                 }
             }
             col++;
@@ -247,10 +243,46 @@ void writeCSV (struct Parser *parser, char *writefilename) {
     }
 }
 
+void checkReallocate(struct Parser *parser, int row, int col, int tokenLen) {
+    if (row >= parser->maxrows) reallocData(parser, 2 * row, col, tokenLen);
+    if (col >= parser->maxcols) reallocData(parser, row, 2 * col, tokenLen);
+    if (tokenLen >= parser->maxtokenlen) reallocData(parser, row, col, 2 * tokenLen);
+}
+
+// Must provide a large enough buffer
+void getData(struct Parser * parser, int row, int col, char * buf, size_t buf_size) {
+    if (buf_size < parser->maxtokenlen) {
+        fprintf(stderr, "Buffer is not large enough to get data\n");
+        return;
+    }
+    if (parser->data[row][col] == NULL) {
+        fprintf(stderr, "Data is null at location row = %d col = %d\n", row, col);
+        return;
+    }
+    if (row >= parser->maxrows || col >= parser->endColIdx[row]) {
+        fprintf(stderr, "Accessed index out of bounds. No data at row = %d col = %d\n", row, col);
+        return;
+    }
+    strcpy(buf, parser->data[row][col]);
+}
+
+void setData(struct Parser * parser, int row, int col, char * buf, size_t buf_size) {
+    checkReallocate(parser, row, col, strlen(buf));
+    if (parser->data[row][col] == NULL) {
+        parser->data[row][col] = (char *) malloc(sizeof(char) * parser->maxtokenlen);
+    }
+    strcpy(parser->data[row][col], buf);
+}
+
 int main() {
     struct Parser *parser = parser_init();
     readCSV(parser, "file.csv");
+    char buf[1000];
+    strcpy(buf, "Google goshidoshilala insi");
+    setData(parser, 300, 2, buf, 1000);
+    getData(parser, 300, 2, buf, 1000);
+    printf("%s\n\n", buf);
     printCSV(parser);
-    //writeCSV(parser, "anotherfile.csv");
-    //freeParser(parser);
+    writeCSV(parser, "anotherfile.csv");
+    freeParser(parser);
 }
