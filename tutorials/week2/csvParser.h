@@ -22,13 +22,17 @@ struct Parser {
     int * endColIdx; // The end of every column
 };
 
+char * stringtok(char * buf, char delim);
+
+int max(int a, int b);
+
 void mallocData(struct Parser *parser, int rows, int cols);
 
 void reallocData(struct Parser *parser, int rows, int cols, int tokenLen);
 
 struct Parser* parser_init();
 
-void setDelimiter (char rowdelim, char coldelim, struct Parser *parser);
+void setDelimiter (struct Parser *parser, char rowdelim, char coldelim);
 
 void readLine(struct Parser *parser, FILE *fp, char **buf, size_t *buf_size);
 
@@ -40,7 +44,7 @@ void checkReallocate(struct Parser *parser, int row, int col, int tokenLen);
 
 void readCSV(struct Parser *parser, char *readfilename);
 
-void printCSV (struct Parser *parser);
+void printCSV (struct Parser *parser, FILE * outStream);
 
 void writeCSV (struct Parser *parser, char *writefilename);
 
