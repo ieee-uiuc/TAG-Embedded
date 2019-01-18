@@ -340,8 +340,9 @@ int main() {
     readCSV(parser, "anotherfile.csv");
     char buf[1000];
     strcpy(buf, "eeee");
-    setData(parser, 50, 2, buf, 1000);
-    //printCSV(parser, stdout);
+    FILE * f = fopen("anotherfile.csv", "r");
+    setData(parser, 50, 3, buf, 1000);
+    printCSV(parser, f);
     memset(buf, 0, 1000);
     getData(parser, 50, 2, buf, 1000);
 
