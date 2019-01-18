@@ -93,9 +93,11 @@ Last one! This is some code for a stack. It is a LIFO data structure, so the fir
 * isEmpty simply checks to see if there are any elements left
 * initStack creates the memory to use for the stack
 
-** There is a subtle memory error in this code. See if you can find it. **
+**There is a subtle memory error in this code. See if you can find it.**
 This is not easy! Question everything in here, and see if you can spot the hidden error. The syntax is fine, and so is the logic.
 There is only memory errors and leaks.
+
+**Hint: There is one memory error, and one memory leak in this code.**
 
 ```cpp
     #define INITIAL_NUM_ELEMS 30
