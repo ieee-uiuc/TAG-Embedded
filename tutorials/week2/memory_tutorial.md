@@ -26,7 +26,7 @@ The function returnArray will create an array in its local stack memory. Then it
 
 Lesson: Don't touch the kernel's memory. Only touch the memory it lets you keep.
 
-So how can we fix this? What if we want more permenant memory?
+So how can we fix this? What if we want more permanent memory?
 
 The answer is the static and dynamic allocation of memory!
 
@@ -121,7 +121,7 @@ The only problem now is what if we allocate an array of size 100000000 and want 
 
 The answer is with the free function!
 
-All the free function does is simply take in an address, and recycles the memory that was allocated.
+All the free function does is simply take in an address, and recycles the memory that was allocated. Be careful though. It'll throw an error if you try and free memory you never allocated.
 
 ```Cpp
 int *mallocedMem = (int *) malloc(sizeof(int) * 30000);
