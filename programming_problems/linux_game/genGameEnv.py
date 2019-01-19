@@ -82,15 +82,30 @@ def create_file(file_path, words_to_add):
         os.write(fd, word + "\n") # delimit the word list by newline
 
 def gen_dir(file_path, dir_name):
+    global directory_number
+    global question_ten_frequency_map
     directory_number += 1
+    if not dir_name in question_ten_frequency_map:
+        question_ten_frequency_map[dir_name] = 0
     question_ten_frequency_map[dir_name] += 1
     os.mkdir(file_path) # Add the path
 
 def gen_file(curr_dir):
+    global question_one_file_name
+    global question_one_file_number
+    global question_one_word_in_file
+    global question_eight_word_frequency
+    global question_two_file_name
+    global question_two_word_frequency
+    global question_two_file_number
+    global file_number
+    global question_four_num_files
     global question_six_largest_file_size
+    global question_ten_frequency_map
     file_name = random.choice(words_list)
+    while os.path.exists(curr_dir + "/" + file_name):
+        file_name = random.choice(words_list)
     if file_number == question_one_file_number:
-        global file_name
         file_name = question_one_file_name
         fd = os.open(curr_dir + "/" + file_name, os.O_CREAT | os.O_WRONLY)
         os.write(fd, curr_dir + "/" + question_one_word_in_file)
@@ -98,7 +113,6 @@ def gen_file(curr_dir):
             question_eight_word_frequency += 1
 
     elif file_number == question_two_file_number:
-        global file_name
         file_name = question_two_file_name
         num_words = random.randint(1, MAX_WORDS)
         words_to_add = []
@@ -111,8 +125,6 @@ def gen_file(curr_dir):
         create_file(curr_dir + "/" + file_name, words_to_add)
 
     elif file_number == question_five_file_number:
-        global file_name
-        global question_five_word
         file_name = question_five_file_name
         num_words = random.randint(3, MAX_WORDS)
         words_to_add = []
@@ -124,7 +136,6 @@ def gen_file(curr_dir):
         create_file(curr_dir + "/" + file_name, words_to_add)
         question_five_word = w[-3]
     else:
-        global file_name
         num_words = random.randint(3, MAX_WORDS)
         words_to_add = []
         for i in range(1, num_words):
@@ -136,6 +147,10 @@ def gen_file(curr_dir):
 
     if file_name != "" and file_name[0] == question_four_letter:
         question_four_num_files += 1
+
+
+    if not file_name in question_ten_frequency_map:
+        question_ten_frequency_map[file_name] = 0
     question_ten_frequency_map[file_name] += 1
     statistics = os.stat(curr_dir + "/" + file_name)
     if statistics.st_size > question_six_largest_file_size:
@@ -147,22 +162,26 @@ directory_number += 1
 
 while file_number < MAX_FILES:
     size = bfs_q.qsize()
-    curr_dir = bfs_q.get()
     while size > 0:
-        num_dirs = random.randint(1, MAX_DIRS)
+        curr_dir = bfs_q.get()
+
+        num_dirs = random.randint(1, MAX_DIR_CHILDREN)
         # random choice whether to generate directory or not
         cnt = 0
         while cnt < num_dirs and directory_number < MAX_DIRS:
             rand_word = random.choice(words_list)
             file_path = curr_dir + "/" + rand_word
+            while os.path.exists(file_path):
+                rand_word = random.choice(words_list)
+                file_path = curr_dir + "/" + rand_word
             gen_dir(file_path, rand_word)
             bfs_q.put(file_path)
             cnt += 1
-
         num_files = random.randint(0, MAX_FILE_CHILDREN)
         cnt = 0
         while cnt < num_files and file_number < MAX_FILES:
             gen_file(curr_dir)
+            print(str(file_number))
             cnt += 1
 
         if num_files == 0:
