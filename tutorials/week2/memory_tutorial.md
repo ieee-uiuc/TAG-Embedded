@@ -85,6 +85,8 @@ if (mallocedMem == NULL) {
 ```
 This code is saying that I want the program to create a block of memory that is sizeof(int) * 5 bytes long, and return me a pointer to the first byte. This is an int array of size 4.
 
+###### Calloc
+
 Another very similar memory allocating function is calloc. This function takes in 2 parameters. One parameter is the number of total elements, and the other is the size of each element.
 
 ```c
@@ -102,6 +104,8 @@ malloc vs. calloc is simply a matter of preference.
 
 Earlier I stated that dynamic memory has the ability to be resized. How do we do this?
 The answer is realloc!
+
+###### Realloc
 
 The realloc function takes in a pointer to the previous block of memory and also a size. The size parameter specifies the size of the new array. After the function returns realloc will give back a pointer to a new block of memory that is the same size as the parameter that was passed in. The key thing to node though is that our previous values in that memory still remain, unless we call realloc with a size less than the original we specified.
 
@@ -134,6 +138,8 @@ printf("%d", mallocedMem[9]); // Should be 300
 The only problem now is what if we allocate an array of size 100000000 and want to use that memory elsewhere? How do we tell the program we are done with it?
 
 The answer is with the free function!
+
+###### Free
 
 All the free function does is simply take in an address, and recycles the memory that was allocated. Be careful though. It'll throw an error if you try and free memory you never allocated.
 
