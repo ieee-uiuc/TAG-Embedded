@@ -1,5 +1,0 @@
-Import('inc_dir')
-Import('build_dir')
-Import('src_dir')
-env = Environment(CPPPATH = ["../" + inc_dir])
-execute = env.Program("program", Glob("*.c"))
