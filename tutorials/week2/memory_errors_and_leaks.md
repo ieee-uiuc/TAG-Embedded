@@ -3,7 +3,7 @@
 ### In the previous tutorial we...
 * Talked about local, static, and dynamic memory
 * The stack and heap sections of memory and their uses
-* How to allocate memory with malloc or calloc in c
+* How to allocate memory with malloc or calloc
 * How to reallocate more memory with realloc
 * How to give memory back to the system with free
 
@@ -20,7 +20,7 @@ Memory errors happen when you do something the Linux kernel doesn't like. This c
 
 So what do these look like? See if you can spot if there are memory errors in these examples, and if so, which types.
 
-```cpp
+```c
     int * getArr() {
         int arr[] = {1, 2, 3, 4};
         return arr;
@@ -34,7 +34,7 @@ So what do these look like? See if you can spot if there are memory errors in th
 
 Lets try another one. Recall how simple pointer arithmetic works.
 
-```cpp
+```c
     int computeSum(int * arr) {
         int sum = 0;
         while (arr != NULL) {
@@ -53,7 +53,7 @@ Lets try another one. Recall how simple pointer arithmetic works.
 
 Lets be more subtle. What's wrong with this program?
 
-```cpp
+```c
     char * repeatChars(char c, int times) {
         char * arr = (char*) malloc(times * sizeof(char));
         for (int i = 0; i < times; i++) {
@@ -70,7 +70,7 @@ Lets be more subtle. What's wrong with this program?
 
 Is there something wrong with this one?
 
-```cpp
+```c
     #define NUM_ROWS 15
     #define NUM_COLS 15
     int main() {
@@ -95,11 +95,11 @@ Last one! This is some code for a stack. It is a LIFO data structure, so the fir
 
 **There is a subtle memory error in this code. See if you can find it.**
 This is not easy! Question everything in here, and see if you can spot the hidden error. The syntax is fine, and so is the logic.
-There is only memory errors and leaks.
+There are only memory errors and leaks.
 
 **Hint: There is one memory error, and one memory leak in this code.**
 
-```cpp
+```c
     #define INITIAL_NUM_ELEMS 30
 
     struct Stack {
