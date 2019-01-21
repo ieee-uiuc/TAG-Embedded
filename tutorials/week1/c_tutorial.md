@@ -91,9 +91,14 @@ int result; // A variable for storing the result of operations
 result = integer1 + integer2; // Self explanatory
 result = integer1 - integer2;
 result = integer1 * integer2;
-
-result = integer1 / integer2; // Divides the 2 ints, but truncates to the nearing whole number. So result would be 3.
-result = integer1 % integer2; // Stores the remainder of integer1 / integer2, and stores in result. Result would be 1
+```
+Divides the 2 ints, but truncates to the nearing whole number. So result would be 3.
+```c
+result = integer1 / integer2;
+```
+Stores the remainder of integer1 / integer2, and stores in result. Result would be 1
+```c
+result = integer1 % integer2; 
 ```
 
 Relational operators are very important for conditional flow of the program. Things like <, >, ==, !=, etc. return bool values which determine flow in the program.
@@ -111,10 +116,16 @@ result = result != true; // true != true evaluates to false
 result = !result; // Result was previously false, so !false is true
 
 int condition1 = true, condition2 = false;
-
-result = condition1 || condition2; // The or ("||") operator returns true if any one of its conditions returns true. So this stores true in result because condition1 is true.
-result = condition1 && condition2; // The and ("&&") operator returns true only if both of its arguments are true. This would store false in result because condition2 is false;
 ```
+The or ("||") operator returns true if any one of its conditions returns true. So this stores true in result because condition1 is true.
+```c
+result = condition1 || condition2; 
+```
+The and ("&&") operator returns true only if both of its arguments are true. This would store false in result because condition2 is false.
+```c
+result = condition1 && condition2;
+```
+
 Now that we have operators down, lets move onto another essential part of cpp: loops
 
 #### Loops
@@ -131,9 +142,7 @@ while (i > 0) {
     i = i - 1;
 }
 ```
-
 Another type of loop we have is the for loop. This loop simply provides a simple abstraction from the while loop. The for loop is mainly used when a task needs to be done a certain amount of times.
-
 ```c
 int i;
 for (i = 5; i > 0; i = i - 1);
@@ -176,7 +185,6 @@ int main () {
     return 0;
 }
 ```
-
 One thing I forgot to mention...in "C", main() is a special function that is executed at the start of the program. This function returns a integer representing the status of the program when it exits. 
 
 A returned value of 0 indicates that the program executed free of error while anything else indicates an error. However, this is just a convention.
