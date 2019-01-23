@@ -42,7 +42,7 @@ int maximumElement(int *arr, int size) {
     You are only given a pointer, so you can't make a new array.
 
     You are not given a size of the array here, so you need to find that out first.
-    Think how char arrays are structured. How would you find the size?
+    Think how char arrays are structured. How would you find the size? Do you need to?
 */
 void reverseString(char *str) {
 
@@ -105,7 +105,10 @@ int strComp(char *str1, char *str2) {
 
     ** HINT ** How could you construct the integer using * and +
     operators?
-
+*/
+int stoi(char * str) {
+    return 0;
+}
 /*
     Given a tic-tac-toe board, determine if anyone has won. If X's have won, then return 'X'.
     If O's have won, then return 'O'. If more than one player has won, or nobody has won, return 'C'.
